@@ -1,4 +1,4 @@
-from read_write_model import read_model
+from .read_write_model import read_model
 import numpy as np
 import json
 import os
@@ -83,7 +83,9 @@ def parse_camera_dict(colmap_cameras, colmap_images):
     return camera_dict
 
 
-def extract_all_to_dir(sparse_dir, out_dir, ext='.bin'):
+def extract_all_to_dir(sparse_dir,
+                       out_dir,
+                       ext='.bin'):
     if not os.path.exists(out_dir):
         os.mkdir(out_dir)
 
@@ -106,11 +108,13 @@ def extract_all_to_dir(sparse_dir, out_dir, ext='.bin'):
                            vertex_colors=all_points[:, -3:].astype(np.uint8))
     mesh.export(os.path.join(out_dir, 'kai_points.ply'))
 
-    with open(track_file, 'w') as fp:
-        json.dump(all_tracks, fp)
+    if not os.path.exists(track_file):
+        with open(track_file, 'w') as fp:
+            json.dump(all_tracks, fp)
 
-    with open(keypoints_file, 'w') as fp:
-        json.dump(view_keypoints, fp)
+    if not os.path.exists(keypoints_file):
+        with open(keypoints_file, 'w') as fp:
+            json.dump(view_keypoints, fp)
 
 
 if __name__ == '__main__':
