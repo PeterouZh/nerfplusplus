@@ -1,3 +1,4 @@
+import tqdm
 import os
 import numpy as np
 import imageio
@@ -84,7 +85,7 @@ def load_data_split(basedir, scene, split, skip=1, try_load_min_depth=True, only
 
     # create ray samplers
     ray_samplers = []
-    for i in range(cam_cnt):
+    for i in tqdm.tqdm(range(cam_cnt), desc=f"{scene} [{split}], # views: {cam_cnt}"):
         intrinsics = parse_txt(intrinsics_files[i])
         pose = parse_txt(pose_files[i])
 
@@ -100,6 +101,6 @@ def load_data_split(basedir, scene, split, skip=1, try_load_min_depth=True, only
                                                   min_depth_path=mindepth_files[i],
                                                   max_depth=max_depth))
 
-    logger.info('Split {}, # views: {}'.format(split, cam_cnt))
+    logger.info('Split {}, # views: {}\n'.format(split, cam_cnt))
 
     return ray_samplers
