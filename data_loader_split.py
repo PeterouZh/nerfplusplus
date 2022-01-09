@@ -25,7 +25,8 @@ def find_files(dir, exts):
         return []
 
 
-def load_data_split(basedir, scene, split, skip=1, try_load_min_depth=True, only_img_files=False):
+def load_data_split(basedir, scene, split, skip=1, try_load_min_depth=True, only_img_files=False,
+                    resolution_level=1, verbose=False):
 
     def parse_txt(filename):
         assert os.path.isfile(filename)
@@ -85,7 +86,12 @@ def load_data_split(basedir, scene, split, skip=1, try_load_min_depth=True, only
 
     # create ray samplers
     ray_samplers = []
-    for i in tqdm.tqdm(range(cam_cnt), desc=f"{scene} [{split}], # views: {cam_cnt}"):
+
+    if verbose:
+        pbar = tqdm.tqdm(range(cam_cnt), desc=f"{scene} [{split}], # views: {cam_cnt}")
+    else:
+        pbar = range(cam_cnt)
+    for i in pbar:
         intrinsics = parse_txt(intrinsics_files[i])
         pose = parse_txt(pose_files[i])
 
@@ -99,7 +105,8 @@ def load_data_split(basedir, scene, split, skip=1, try_load_min_depth=True, only
                                                   img_path=img_files[i],
                                                   mask_path=mask_files[i],
                                                   min_depth_path=mindepth_files[i],
-                                                  max_depth=max_depth))
+                                                  max_depth=max_depth,
+                                                  resolution_level=resolution_level))
 
     logger.info('Split {}, # views: {}\n'.format(split, cam_cnt))
 
