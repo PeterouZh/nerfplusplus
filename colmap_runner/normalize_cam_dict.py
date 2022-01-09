@@ -47,7 +47,7 @@ def normalize_cam_dict(in_cam_dict_file, out_cam_dict_file, target_radius=1., in
         geometry_norm = geometry.transform(tf)
         o3d.io.write_triangle_mesh(out_geometry_file, geometry_norm)
   
-    mesh_norm = mesh.transform(tf)
+    # mesh_norm = mesh.transform(tf)
     def transform_pose(W2C, translate, scale):
         C2W = np.linalg.inv(W2C)
         cam_center = C2W[:3, 3]
@@ -64,6 +64,7 @@ def normalize_cam_dict(in_cam_dict_file, out_cam_dict_file, target_radius=1., in
 
     with open(out_cam_dict_file, 'w') as fp:
         json.dump(out_cam_dict, fp, indent=2, sort_keys=True)
+    pass
 
 
 if __name__ == '__main__':
